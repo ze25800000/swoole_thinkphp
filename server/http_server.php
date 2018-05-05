@@ -15,20 +15,20 @@ $http->on( 'WorkerStart', function ( swoole_server $server, $worker_id ) {
 
 } );
 
-$http->on( 'request', function ( $request, $response ) {
-
+$http->on( 'request', function ( $request, $response ) use ( $http ) {
+	$_SERVER = [];
 	if ( isset( $request->server ) ) {
 		foreach ( $request->server as $k => $v ) {
 			$_SERVER[ $k ] = $v;
 		}
 	}
-
+	$_GET = [];
 	if ( isset( $request->get ) ) {
 		foreach ( $request->get as $k => $v ) {
 			$_GET[ $k ] = $v;
 		}
 	}
-
+	$_POST = [];
 	if ( isset( $request->post ) ) {
 		foreach ( $request->post as $k => $v ) {
 			$_POST[ $k ] = $v;
@@ -40,12 +40,14 @@ $http->on( 'request', function ( $request, $response ) {
 		think\Container::get( 'app', [ APP_PATH ] )
 		               ->run()
 		               ->send();
-	} catch (\Exception $e) {
+	} catch ( \Exception $e ) {
 		// todo
 	}
+	echo '---action---' . request()->action() . PHP_EOL;
 	$res = ob_get_contents();
 	ob_end_clean();
 	$response->end( $res );
+//	$http->close();
 } );
 
 $http->start();
