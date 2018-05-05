@@ -4,7 +4,8 @@ namespace app\index\controller;
 
 class Index {
 	public function index() {
-		return 'hello world';
+		print_r( input( 'get.' ) );
+		echo 'hello world';
 	}
 
 	public function hello( $name = 'ThinkPHP5' ) {

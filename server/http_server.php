@@ -34,14 +34,18 @@ $http->on( 'request', function ( $request, $response ) {
 			$_POST[ $k ] = $v;
 		}
 	}
-
+	ob_start();
 	// 执行应用并响应
-	think\Container::get( 'app', [ APP_PATH ] )
-	               ->run()
-	               ->send();
-
-	$response->cookie( "yangze", "asdfasdf", time() + 1000 );
-	$response->end( "<h1>" . json_encode( $request->get ) . "</h1>" );
+	try {
+		think\Container::get( 'app', [ APP_PATH ] )
+		               ->run()
+		               ->send();
+	} catch (\Exception $e) {
+		// todo
+	}
+	$res = ob_get_contents();
+	ob_end_clean();
+	$response->end( $res );
 } );
 
 $http->start();
