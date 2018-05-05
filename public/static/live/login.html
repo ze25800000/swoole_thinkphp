@@ -14,7 +14,7 @@
 	<link rel="stylesheet" type="text/css" href="./assert/css/main.css" />
 	<link rel="stylesheet" href="./assert/iconfont/iconfont.css">
 	<link rel="shortcut icon" href="./favicon.ico">
-	<script src="./js/jquery-3.3.1.min.js"></script>
+	<script src="./assert/js/jquery-3.3.1.min.js"></script>
 	<style>
 		body {
 			background: #eee;
@@ -95,7 +95,7 @@
 		  $('#authCodeBtn').click(function (event) {
 
 			    var phone_num = $(" input[ name='phone_num' ] ").val()
-				url = "http://singwa.swoole.com:8811?s=index/login&phone_num="+phone_num;
+				url = "http://47.104.213.134?s=index/send&phone_num="+phone_num;
 				$(this).html('已发送').attr('disabled', true);
 				// $.post()
 				$.get(url, function (data) {
