@@ -373,7 +373,6 @@ class App implements \ArrayAccess
     public function routeCheck()
     {
         $path = $this->request->path();
-	    echo "path:" . $path;
         $depr = $this->config('app.pathinfo_depr');
 
         // 路由检测
