@@ -22,6 +22,12 @@ $http->on( 'request', function ( $request, $response ) use ( $http ) {
 			$_SERVER[ $k ] = $v;
 		}
 	}
+	if ( isset( $request->header ) ) {
+		foreach ( $request->header as $k => $v ) {
+			$_SERVER[ $k ] = $v;
+		}
+	}
+
 	$_GET = [];
 	if ( isset( $request->get ) ) {
 		foreach ( $request->get as $k => $v ) {

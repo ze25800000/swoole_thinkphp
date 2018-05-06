@@ -4,8 +4,11 @@ namespace app\common\lib;
 
 
 class Predis {
-	private $redis = '';
+	public $redis = '';
 	private static $_instance = null;
+	public static $smsPre = "sms_";
+	public static $userPre = "user_";
+
 
 	public static function getInstance() {
 		if ( empty( self::$_instance ) ) {
@@ -23,6 +26,15 @@ class Predis {
 		}
 	}
 
+	public static function smsKey( $phone ) {
+		return self::$smsPre . $phone;
+	}
+
+	public static function userKey( $phone ) {
+		return self::$userPre . $phone;
+	}
+
+
 	public function set( $key, $value, $time = 0 ) {
 		if ( ! $key ) {
 			return '';
@@ -34,7 +46,7 @@ class Predis {
 			return $this->redis->set( $key, $value );
 		}
 
-		return $this->redis->setex( $key, $value, $time );
+		return $this->redis->setex( $key, $time, $value );
 	}
 
 	public function get( $key ) {
