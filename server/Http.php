@@ -26,7 +26,8 @@ class Http {
 		// 定义应用目录
 		define( 'APP_PATH', __DIR__ . '/../application/' );
 		// 加载基础文件
-		require __DIR__ . '/../thinkphp/base.php';
+//		require __DIR__ . '/../thinkphp/base.php';
+		require __DIR__ . '/../thinkphp/start.php';
 	}
 
 	public function onRequest( $request, $response ) {
@@ -54,6 +55,9 @@ class Http {
 				$_POST[ $k ] = $v;
 			}
 		}
+
+		$_POST['http_server'] = $this->http;
+
 		ob_start();
 		try {
 			think\Container::get( 'app', [ APP_PATH ] )
@@ -68,15 +72,19 @@ class Http {
 	}
 
 
-
 	public function onTask( $http, $taskId, $workerId, $data ) {
-		print_r( $data );
-		for ( $i = 0; $i < 10; $i ++ ) {
-			sleep( $i );
-			$http->push( $data['fd'], $i . '--' . date( "H:i:s" ) );
+		$uid      = 'ze25800000';
+		$pwd      = 'yangze1234';
+		$smsObj   = new app\common\lib\Sms( $uid, $pwd );
+		$template = "100006";
+		try {
+			$result = $smsObj->send( $data['phone'], $data['code'], $template );
+			app\common\lib\Predis::getInstance()->set( app\common\lib\Predis::smsKey( $data['phone'] ), $data['code'], config( 'redis.out_time' ) );
+		} catch ( \Exception $e ) {
+			echo $e->getMessage();
 		}
-
-		return 'on task finish';
+		print_r( $result );
+		echo $data['code'];
 	}
 
 	public function onFinish( $http, $taskId, $data ) {

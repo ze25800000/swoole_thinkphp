@@ -14,21 +14,14 @@ class Send extends Controller {
 		if ( empty( $phone ) || ! is_numeric( $phone ) || strlen( $phone ) != 11 ) {
 			return Util::show( config( 'code.error' ), 'error' );
 		}
-		$code     = rand( 1000, 9999 );
-		$uid      = 'ze25800000';
-		$pwd      = 'yangze1234';
-		$sms      = new Sms( $uid, $pwd );
-		$template = "100006";
-		$result   = $sms->send( $phone, $code, $template );
-		if ( $result['stat'] == '102' ) {
-			Predis::getInstance()->set( Predis::smsKey( $phone ), $code, config( 'redis.out_time' ) );
+		$code = rand( 1000, 9999 );
 
-			return Util::show( config( 'code.success' ), '验证码发送成功', $code );
-		} else {
-			return Util::show( config( 'code.error' ), '验证码发送失败' );
-		}
+		$_POST['http_server']->task( [
+			'phone' => $phone,
+			'code'  => $code
+		] );
 
-		return Util::show( config( 'code.success' ), 'success' );
+//		return Util::show( config( 'code.success' ), 'success' );
 
 	}
 }
