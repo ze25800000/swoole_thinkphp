@@ -24,7 +24,7 @@ class Send extends Controller {
 			]
 		] );
 
-//		return Util::show( config( 'code.success' ), 'success' );
+		return Util::show( config( 'code.success' ), 'success' );
 
 	}
 }
