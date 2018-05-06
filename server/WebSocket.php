@@ -66,6 +66,13 @@ class Websocket {
 			}
 		}
 
+		$_FILES = [];
+		if ( isset( $request->files ) ) {
+			foreach ( $request->files as $k => $v ) {
+				$_FILES[ $k ] = $v;
+			}
+		}
+
 		$_POST['http_server'] = $this->websocket;
 
 		ob_start();
