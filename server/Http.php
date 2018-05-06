@@ -73,18 +73,11 @@ class Http {
 
 
 	public function onTask( $http, $taskId, $workerId, $data ) {
-		$uid      = 'ze25800000';
-		$pwd      = 'yangze1234';
-		$smsObj   = new app\common\lib\Sms( $uid, $pwd );
-		$template = "100006";
-		try {
-			$result = $smsObj->send( $data['phone'], $data['code'], $template );
-			app\common\lib\Predis::getInstance()->set( app\common\lib\Predis::smsKey( $data['phone'] ), $data['code'], config( 'redis.out_time' ) );
-		} catch ( \Exception $e ) {
-			echo $e->getMessage();
-		}
-		print_r( $result );
-		echo $data['code'];
+		$obj    = new app\common\lib\task\Task;
+		$method = $data['method'];
+		$flag   = $obj->$method( $data['data'] );
+
+		return $flag;
 	}
 
 	public function onFinish( $http, $taskId, $data ) {

@@ -17,8 +17,11 @@ class Send extends Controller {
 		$code = rand( 1000, 9999 );
 
 		$_POST['http_server']->task( [
-			'phone' => $phone,
-			'code'  => $code
+			'method' => 'sendSms',
+			'data'   => [
+				'phone' => $phone,
+				'code'  => $code
+			]
 		] );
 
 //		return Util::show( config( 'code.success' ), 'success' );
