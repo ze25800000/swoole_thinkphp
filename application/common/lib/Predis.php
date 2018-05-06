@@ -57,13 +57,13 @@ class Predis {
 		return $this->redis->get( $key );
 	}
 
-	public function sAdd( $key, $value ) {
+	/*public function sAdd( $key, $value ) {
 		return $this->redis->sAdd( $key, $value );
-	}
+	}*/
 
-	public function sRem( $key, $value ) {
+	/*public function sRem( $key, $value ) {
 		return $this->redis->sRem( $key, $value );
-	}
+	}*/
 
 	public function sMembers( $key ) {
 		return $this->redis->sMembers( $key );
@@ -71,5 +71,12 @@ class Predis {
 
 	public function del( $key ) {
 		return $this->redis->del( $key );
+	}
+
+	public function __call( $name, $arguments ) {
+		if ( count( $arguments ) != 2 ) {
+			return '';
+		}
+		$this->redis->$name( $arguments[0], $arguments[1] );
 	}
 }
