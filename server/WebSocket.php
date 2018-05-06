@@ -23,6 +23,12 @@ class Websocket {
 		$this->websocket->start();
 	}
 
+	public function isRedisEmpty() {
+		$clients = app\common\lib\Predis::getInstance()->sMembers( config( 'redis.live_game_key' ) );
+		if ( ! empty( $clients ) ) {
+			app\common\lib\Predis::getInstance()->del( config( 'redis.live_game_key' ) );
+		}
+	}
 
 	public function onWorkerStart( $server, $worker_id ) {
 		// 定义应用目录
@@ -30,10 +36,12 @@ class Websocket {
 		// 加载基础文件
 //		require __DIR__ . '/../thinkphp/base.php';
 		require __DIR__ . '/../thinkphp/start.php';
+		$this->isRedisEmpty();
 	}
 
 	public function onOpen( $ws, $request ) {
-		echo "监听客户端fd：" . $request->fd . "\n";
+		app\common\lib\Predis::getInstance()->sAdd( config( 'redis.live_game_key' ), $request->fd );
+		echo '开启客户端编号：' . $request->fd . PHP_EOL;
 	}
 
 	public function onMessage( $ws, $frame ) {
@@ -103,6 +111,8 @@ class Websocket {
 	}
 
 	public function onClose( $http, $fd ) {
+		app\common\lib\Predis::getInstance()->sRem( config( 'redis.live_game_key' ), $fd );
+		echo '关闭客户端：' . $fd . PHP_EOL;
 	}
 }
 
