@@ -18,9 +18,11 @@ class Chart {
 			'user'    => '用户' . rand( 0, 2000 ),
 			'content' => $_GET['content']
 		];
-		foreach ( $_POST['http_server']->ports[1]->connections as $fd ) {
-			$_POST['http_server']->push( $fd, json_encode( $data ) );
-		}
+
+		$_POST['http_server']->task( [
+			'method' => 'pushChart',
+			'data'   => $data
+		] );
 
 		return Util::show( config( 'code.success' ), '发送成功' );
 	}

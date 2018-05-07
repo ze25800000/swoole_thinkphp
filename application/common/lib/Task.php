@@ -1,9 +1,7 @@
 <?php
 
-namespace app\common\lib\task;
+namespace app\common\lib;
 
-use app\common\lib\Predis;
-use app\common\lib\Sms;
 
 class Task {
 	public function sendSms( $data, $server ) {
@@ -32,5 +30,11 @@ class Task {
 		}
 
 		return true;
+	}
+
+	public function pushChart( $data, $server ) {
+		foreach ( $server->ports[1]->connections as $fd ) {
+			$server->push( $fd, json_encode( $data ) );
+		}
 	}
 }
