@@ -3,10 +3,13 @@
 class Websocket {
 	const HOST = '0.0.0.0';
 	CONST PORT = 8081;
+	CONST CHART_PORT = 8082;
 	public $websocket = null;
 
 	public function __construct() {
 		$this->websocket = new swoole_websocket_server( self::HOST, self::PORT );
+		$this->websocket->listen( self::PORT, self::CHART_PORT, SWOOLE_SOCK_TCP );
+
 		$this->websocket->set( [
 			'enable_static_handler' => true,
 			'document_root'         => '/home/work/swoole_thinkphp/public/static',
