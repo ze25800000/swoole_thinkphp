@@ -4,12 +4,15 @@ namespace app\admin\controller;
 
 
 use app\common\lib\Predis;
+use app\common\lib\Util;
 
 class Live {
 	public function push() {
-		$clients = Predis::getInstance()->sMembers( config( 'redis.live_game_key' ) );
-		foreach ( $clients as $fd ) {
-			$_POST['http_server']->push( $fd, json_encode( $_GET ) );
-		}
+		$_POST['http_server']->task( [
+			'method' => 'pushLive',
+			'data'   => $_GET
+		] );
+
+		return Util::show( config( 'code.success' ), '信息推送成功' );
 	}
 }

@@ -4,6 +4,7 @@ websocket.onopen = function (evt) {
     console.log("连接websocket成功");
 }
 websocket.onmessage = function (e) {
+    console.log(e.data)
     push(e.data);
 
 }

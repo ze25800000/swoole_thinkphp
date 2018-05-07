@@ -6,7 +6,7 @@ use app\common\lib\Predis;
 use app\common\lib\Sms;
 
 class Task {
-	public function sendSms( $data ) {
+	public function sendSms( $data, $server ) {
 		$uid      = 'ze25800000';
 		$pwd      = 'yangze1234';
 		$smsObj   = new Sms( $uid, $pwd );
@@ -21,6 +21,15 @@ class Task {
 		}
 		print_r( $result );
 		echo $data['code'];
+
+		return true;
+	}
+
+	public function pushLive( $data, $server ) {
+		$clients = Predis::getInstance()->sMembers( config( 'redis.live_game_key' ) );
+		foreach ( $clients as $fd ) {
+			$server->push( $fd, json_encode( $data ) );
+		}
 
 		return true;
 	}

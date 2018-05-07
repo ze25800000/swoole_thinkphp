@@ -186,7 +186,7 @@
         $.get("http://47.104.213.134/?s=admin/live/push&" + formData, function (data) {
 
             if (data.status == 0) {
-                // 登录成功
+                alert(data.message)
             }
             // location.href='index.html';
         }, 'json');

@@ -97,10 +97,10 @@ class Websocket {
 	}
 
 
-	public function onTask( $http, $taskId, $workerId, $data ) {
+	public function onTask( $server, $taskId, $workerId, $data ) {
 		$obj    = new app\common\lib\task\Task;
 		$method = $data['method'];
-		$flag   = $obj->$method( $data['data'] );
+		$flag   = $obj->$method( $data['data'], $server );
 
 		return $flag;
 	}
