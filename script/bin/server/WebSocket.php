@@ -16,6 +16,7 @@ class Websocket {
 			'worker_num'            => 4,
 			'task_worker_num'       => 4
 		] );
+		$this->websocket->on( 'start', [ $this, 'onStart' ] );
 		$this->websocket->on( 'workerstart', [ $this, 'onWorkerStart' ] );
 		$this->websocket->on( 'open', [ $this, 'onOpen' ] );
 		$this->websocket->on( 'message', [ $this, 'onMessage' ] );
@@ -24,6 +25,10 @@ class Websocket {
 		$this->websocket->on( 'finish', [ $this, 'onFinish' ] );
 		$this->websocket->on( 'close', [ $this, 'onClose' ] );
 		$this->websocket->start();
+	}
+
+	public function onStart($server) {
+		swoole_set_process_name( 'live_master' );
 	}
 
 	public function isRedisEmpty() {
@@ -123,7 +128,6 @@ class Websocket {
 
 	public function onClose( $http, $fd ) {
 		app\common\lib\Predis::getInstance()->sRem( config( 'redis.live_game_key' ), $fd );
-		echo '关闭客户端：' . $fd . PHP_EOL;
 	}
 
 	public function writeLog() {
