@@ -82,6 +82,7 @@ class Websocket {
 				$_FILES[ $k ] = $v;
 			}
 		}
+		$this->writeLog();
 
 		$_POST['http_server'] = $this->websocket;
 
@@ -115,6 +116,17 @@ class Websocket {
 	public function onClose( $http, $fd ) {
 		app\common\lib\Predis::getInstance()->sRem( config( 'redis.live_game_key' ), $fd );
 		echo '关闭客户端：' . $fd . PHP_EOL;
+	}
+
+	public function writeLog() {
+		$datas = array_merge( [ date( "Ymd H:i:s" ) ], $_GET, $_POST, $_SERVER );
+		$logs  = "";
+		foreach ( $datas as $key => $value ) {
+			$logs .= $key . ":" . $value . " ";
+		}
+		swoole_async_writefile( APP_PATH . '/../runtime/log/' . date( "Ym" ) . "/" . date( 'd' ) . "_access.log", $logs . PHP_EOL, function ( $filename ) {
+
+		}, FILE_APPEND );
 	}
 }
 
