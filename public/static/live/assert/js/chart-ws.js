@@ -4,8 +4,7 @@ websocket.onopen = function (evt) {
     console.log("聊天室连接websocket成功");
 }
 websocket.onmessage = function (e) {
-    console.log(e.data)
-
+    push(e.data)
 }
 websocket.onclose = function () {
     console.log("close")
@@ -15,5 +14,10 @@ websocket.onerror = function () {
 }
 
 function push(data) {
-    // console.log(JSON.parse(data))
+    var data = JSON.parse(data),
+        html = `<div class="comment">
+                <span>${data.user}</span>
+                <span>${data.content}</span>
+            </div>`
+    $('#comments').prepend(html)
 }

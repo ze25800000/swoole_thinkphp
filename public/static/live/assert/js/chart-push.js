@@ -7,7 +7,7 @@ $('#discuss-box').keydown(function (event) {
             content: text,
             game_id: 1
         }
-        $.post(url, data, function (result) {
+        $.get(url, data, function (result) {
             $this.val('')
         }, 'json')
     }
